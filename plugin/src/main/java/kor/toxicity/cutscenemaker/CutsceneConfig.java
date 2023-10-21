@@ -29,6 +29,8 @@ public class CutsceneConfig {
     @Getter
     private int autoSaveTime;
     @Getter
+    private int autoBackupTime;
+    @Getter
     private Material dialogReader;
     @Getter
     private Consumer<Player> defaultTypingSound, questCompleteSound;
@@ -66,6 +68,7 @@ public class CutsceneConfig {
             changeGameMode = load.getBoolean("change-game-mode",true);
             debug = load.getBoolean("debug",false);
             autoSaveTime = load.getInt("auto-save-time",300);
+            autoBackupTime = load.getInt("auto-backup-time", 200);
 
             defaultTypingSound = QuestUtil.getSoundPlay(load.getString("default-typing-sound","block.stone_button.click_on 0.2 0.7"));
             questCompleteSound = QuestUtil.getSoundPlay(load.getString("quest-complete-sound","ui.toast.challenge_complete 1 1"));

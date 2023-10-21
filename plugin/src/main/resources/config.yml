@@ -7,6 +7,7 @@ time-limit: " &6&l[!] &f시간 제한: %t분"
 default-game-mode: survival #관전자 상태에서 해제될 때, 기본이 되는 게임모드입니다.
 change-game-mode: true #유저가 접속할 시 위의 게임모드로 변경할 지 여부입니다.
 auto-save-time: 300 #유저가 접속한 이후로 변수 데이터를 세이브하는 주기입니다. 초 단위입니다.
+auto-backup-time: 200 #플러그인이 로드된 이후로 변수 데이터를 백업하는 주기입니다. 초 단위입니다.
 
 default-dialog-reader: BOOK #기본 Dialog 출력 아이콘입니다.
 default-typing-sound: block.stone_button.click_on 0.2 0.7 #아무것도 설정하지 않았을 시의 타이핑 사운드입니다.

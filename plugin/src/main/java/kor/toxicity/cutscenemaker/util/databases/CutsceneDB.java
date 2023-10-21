@@ -35,7 +35,7 @@ public class CutsceneDB  {
     private static final UserDB CSV_DB = new UserDB() {
         @SuppressWarnings("ResultOfMethodCallIgnored")
         @Override
-        public VarsContainer read(OfflinePlayer player, JavaPlugin plugin) {
+        public synchronized VarsContainer read(OfflinePlayer player, JavaPlugin plugin) {
             VarsContainer container = new VarsContainer();
             File create = new File(new File(plugin.getDataFolder(),"User"), player.getUniqueId().toString() + ".csv");
             if (!create.exists()) {
@@ -64,7 +64,7 @@ public class CutsceneDB  {
         }
 
         @Override
-        public void save(OfflinePlayer player, JavaPlugin plugin, VarsContainer container) {
+        public synchronized void save(OfflinePlayer player, JavaPlugin plugin, VarsContainer container) {
             File create = new File(new File(plugin.getDataFolder(),"User"), player.getUniqueId().toString() + ".csv");
             try (FileWriter file = new FileWriter(create); CSVWriter writer = new CSVWriter(file)) {
                 container.getVars().entrySet().stream()

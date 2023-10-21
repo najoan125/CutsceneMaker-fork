@@ -177,13 +177,11 @@ public final class CutsceneManager {
         }
         @EventHandler(priority = EventPriority.MONITOR)
         public void onQuit(PlayerQuitEvent e) {
-            Bukkit.getScheduler().runTaskAsynchronously(plugin,() -> {
-                VarsContainer c = container.get(e.getPlayer());
-                if (c != null) {
-                    CutsceneDB.stop(e.getPlayer(),plugin,c);
-                    container.remove(e.getPlayer());
-                }
-            });
+            VarsContainer c = container.get(e.getPlayer());
+            if (c != null) {
+                CutsceneDB.stop(e.getPlayer(),plugin,c);
+                container.remove(e.getPlayer());
+            }
         }
     }
 

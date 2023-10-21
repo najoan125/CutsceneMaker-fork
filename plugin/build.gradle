@@ -22,6 +22,7 @@ dependencies {
     implementation group: 'org.codemc.worldguardwrapper', name: 'worldguardwrapper', version: '1.2.0-SNAPSHOT'
     implementation 'org.apache.httpcomponents:httpclient:4.5.14'
     implementation group: "org.bstats", name: "bstats-bukkit", version: "3.0.2"
+    implementation 'org.apache.commons:commons-io:1.3.2'
 
     compileOnly 'com.mojang:authlib:1.5.21'
     compileOnly 'com.sk89q.worldguard:worldguard-legacy:6.2'

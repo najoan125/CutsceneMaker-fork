@@ -17,6 +17,7 @@ import kor.toxicity.cutscenemaker.util.gui.GuiRegister;
 import kor.toxicity.cutscenemaker.util.gui.MouseButton;
 import kor.toxicity.cutscenemaker.util.vars.Vars;
 import kor.toxicity.cutscenemaker.util.vars.VarsContainer;
+import org.apache.commons.io.FileUtils;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -32,8 +33,12 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.*;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -50,6 +55,7 @@ public final class CutsceneMaker extends JavaPlugin {
     private final List<Reloadable> reload = new ArrayList<>();
     private static CutsceneManager manager;
     private static boolean debug;
+    private ScheduledExecutorService autoBackupTimer = Executors.newSingleThreadScheduledExecutor();
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
     @Override
@@ -72,6 +78,14 @@ public final class CutsceneMaker extends JavaPlugin {
         reload.add(new LocationData(this));
         reload.add(new QuestData(this));
         reload.add(new ActionData(this));
+        reload.add(() -> {
+            autoBackupTimer.shutdown();
+            int backupTime = CutsceneConfig.getInstance().getAutoBackupTime();
+            if (backupTime >= 1) {
+                autoBackupTimer = Executors.newSingleThreadScheduledExecutor();
+                autoBackupTimer.scheduleAtFixedRate(this::autoBackup, 0, backupTime, TimeUnit.SECONDS);
+            }
+        });
 
         send("Version found: " + NMSChecker.getVersion());
         if (NMSChecker.getHandler() != null) {
@@ -90,6 +104,20 @@ public final class CutsceneMaker extends JavaPlugin {
         });
 
         load(t -> send("Plugin enabled."));
+    }
+
+    private void autoBackup() {
+        File sourceDirectory = new File(this.getDataFolder(), "User");
+
+        LocalDateTime now = LocalDateTime.now();
+        String formattedNow = now.format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss"));
+
+        File destinationDirectory = new File(new File(this.getDataFolder(), "Backup"), "Users_"+formattedNow);
+        try {
+            FileUtils.copyDirectory(sourceDirectory, destinationDirectory);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void tempStorage(Player player) {
